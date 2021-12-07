@@ -39,13 +39,21 @@ class Training:
     def get_distance(self) -> float:
         """Получить дистанцию в км."""
         # формула расчёта: action * LEN_STEP / M_IN_KM
-        pass
+        # Возвращает дистанцию в км, которую преодолел пользователь
+        # за время тренировки
+        LEN_STEP = '?????????????'
+        M_IN_KM = 1000
+        distance = self.action * (LEN_STEP / M_IN_KM)
+        return distance
 
     def get_mean_speed(self) -> float:
         """Получить среднюю скорость движения."""
+        distance = self.get_distance()
         # формула расчёта: преодоленная_дистанция_за_трени-
         # ровку / время_тренировки
-        pass
+        # возвращает значение средней скорости движения во время тренировки
+        mean_speed = distance / self.duration 
+        return mean_speed
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
@@ -55,8 +63,16 @@ class Training:
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
-        # возвращает объект класса сообщения
-        pass
+        distance = self.get_distance()
+        speed = self.get_mean_speed()
+        calories = self.get_spent_calories()
+        message = InfoMessage(self.action,
+                              self.duration,
+                              distance,
+                              speed,
+                              calories
+                             )
+        return message
 
 
 class Running(Training):
@@ -77,6 +93,12 @@ class Running(Training):
         """Получить количество затраченных калорий."""
         # формула: (18 * средняя_скорость - 20) * вес_спортсме-
         # на / M_IN_KM * время_тренировки_в_минутах
+        coeff_1 = 18
+        coeff_2 = 20
+        mean_speed = super().get_mean_speed()
+        spent_calories = (coeff_1 * (mean_speed - coeff_2)) * self.weight / 1000 / self.duration
+        return spent_calories
+
         pass
 
 
@@ -96,13 +118,17 @@ class SportsWalking(Training):
         """Получить количество затраченных калорий."""
         # (0.035 * вес + (средняя_скорость**2 // рост) * 0.029 * вес) * вре-
         # мя_тренировки_в_минута
-        pass
+        coeff_1 = 0.035
+        coeff_2 = 2
+        coeff_3 = 0.029
+        mean_speed = super().get_mean_speed()
+        spent_calories = coeff_1 * self.weight + ((mean_speed ** coeff_2) // self.height) * coeff_3 * self.weight)
+        return spent_calories
     pass
 
 
 class Swimming(Training):
     """Тренировка: плавание."""
-
     # Есть и ещё один параметр, который надо переопределить,
     # ведь расстояние, преодолеваемое за один гребок, отличается
     # от длины шага. Значит, необходимо переопределить атрибут
@@ -122,14 +148,16 @@ class Swimming(Training):
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
         # (средняя_скорость + 1.1) * 2 * вес
-        pass
+        coeff_calorie_1 = 1.1
+        coeff_calorie_2 = 2
+        mean_speed = self.get_mean_speed()
+        return (mean_speed + coeff_calorie_1) * coeff_calorie_2 * self.weight
 
     def get_mean_speed(self) -> float:
         """Получить среднюю скорость движения."""
         # длина_бассейна * count_pool / M_IN_KM / время_тренировки
-        pass
-
-    pass
+        M_IN_KM = 1000
+        return ((self.length_pool * self.count_pool) / M_IN_KM) / self.duration
 
 
 def read_package(workout_type: str, data: list) -> Training:
