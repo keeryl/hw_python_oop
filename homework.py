@@ -17,11 +17,11 @@ class InfoMessage:
     def show_info_message(self) -> str:
         """Вернуть строку с информацией о тренировке."""
 
-        return (f'Тип тренировки: {self.training_type}; '
-                f'Длительность: {self.duration} ч.; '
-                f'Дистанция: {self.distance} км; '
-                f'Ср. скорость: {self.speed} км/ч; '
-                f'Потрачено ккал: {self.calories}.')
+        print(f'Тип тренировки: {self.training_type}; '
+              f'Длительность: {self.duration} ч.; '
+              f'Дистанция: {self.distance} км; '
+              f'Ср. скорость: {self.speed} км/ч; '
+              f'Потрачено ккал: {self.calories}.')
 
 
 class Training:
@@ -72,7 +72,7 @@ class Training:
                               speed,
                               calories
                              )
-        return message
+        return message.show_info_message()
 
 
 class Running(Training):
